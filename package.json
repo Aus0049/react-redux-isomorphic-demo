@@ -1,0 +1,28 @@
+{
+  "name": "react-redux-isomorphic-demo",
+  "version": "1.0.0",
+  "description": "react + redux + isomorphic demo",
+  "main": "index.js",
+  "scripts": {
+    "start": "pm2 start ecosystem.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aus0049/react-redux-isomorphic-demo.git"
+  },
+  "keywords": [
+    "react",
+    "isomorphic"
+  ],
+  "author": "Aus",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Aus0049/react-redux-isomorphic-demo/issues"
+  },
+  "homepage": "https://github.com/Aus0049/react-redux-isomorphic-demo#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
+}
