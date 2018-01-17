@@ -1,0 +1,60 @@
+@charset "UTF-8";
+
+@import '../../../style/base';
+
+// list
+.list-container {
+  display: flex;
+
+  .list-head-box {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: #000;
+
+    .head {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .list-content {
+    display: block;
+    flex: 1;
+    padding-left: 10px;
+
+    .name, .content {
+      margin: 0;
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .name {
+      color: #5b6f8f;
+    }
+  }
+
+  .list-comment {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    .time-box {
+      padding-top: 10px;
+      padding-bottom: 15px;
+      font-size: 14px;
+      color: #787878;
+
+      .time {
+        display: inline-block;
+      }
+
+      .icon {
+        display: inline-block;
+        float: right;
+        font-size: 18px;
+      }
+    }
+  }
+}

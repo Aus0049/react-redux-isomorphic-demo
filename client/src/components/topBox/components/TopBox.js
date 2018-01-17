@@ -39,5 +39,4 @@ TopBox.defaultProps = {
     userImageCallBack: function(){}
 };
 
-
 export default TopBox
