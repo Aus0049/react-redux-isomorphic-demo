@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+@import '../../../style/base';
+
+// top-box
+.top-box-container {
+  position: relative;
+  width: 100%;
+  height: 250px;
+  margin-bottom: 20px;
+  background: #000;
+
+  .top-box-user-box {
+    position: absolute;
+    right: 20px;
+    bottom: -20px;
+
+    .username {
+      position: absolute;
+      right: 120%;
+      top: 10px;
+      text-align: right;
+      font-size: 16px;
+      color: #fff;
+    }
+
+    .user-image {
+      box-sizing: border-box;
+      display: block;
+      width: 75px;
+      height: 75px;
+      border: 1px solid $darkGray;
+      background: #ccc;
+    }
+  }
+
+  .slogan {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -45px;
+    margin: 0;
+    padding: 0 20px;
+    text-align: right;
+    font-size: 16px;
+    color: $textGray;
+  }
+}

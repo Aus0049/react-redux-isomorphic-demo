@@ -17,7 +17,9 @@ class App extends React.PureComponent {
               <BrowserRouter forceRefresh={!supportsHistory}>
                   <Layout>
                       <Header/>
-                      <Routes />
+                      <div className="page-container">
+                          <Routes />
+                      </div>
                   </Layout>
               </BrowserRouter>
           </Provider>
