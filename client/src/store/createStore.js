@@ -4,9 +4,7 @@
 import { applyMiddleware, compose, createStore } from 'redux'
 import thunk from 'redux-thunk'
 import reduxLogger from 'redux-logger'
-import history  from './history'
 import makeRootReducer from './reducers'
-import { updateLocation } from './location'
 
 export default (initialState = {}) => {
     // ======================================================
@@ -38,9 +36,8 @@ export default (initialState = {}) => {
     )
     store.asyncReducers = {}
 
-    console.log(history);
     // To unsubscribe, invoke `store.unsubscribeHistory()` anytime
-    store.unsubscribeHistory = history.listen(updateLocation(store))
+    // store.unsubscribeHistory = history.listen(updateLocation(store))
 
     if (module.hot) {
         module.hot.accept('./reducers', () => {

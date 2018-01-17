@@ -1,4 +1,5 @@
 import React from 'react';
+// import { hydrate } from 'react-dom';
 import ReactDOM from 'react-dom';
 import createStore from './store/createStore';
 import App from './containers/app/App';
@@ -15,12 +16,16 @@ const store = createStore(initialState)
 const MOUNT_NODE = document.getElementById('root')
 
 let render = () => {
-    const routes = require('./routes/index')['default'](store)
+    // ssr use this
+    // hydrate (
+    //     <App store={store} />,
+    //     MOUNT_NODE
+    // );
 
     ReactDOM.render(
-        <App store={store} routes={routes} />,
+        <App store={store} />,
         MOUNT_NODE
-    )
+    );
 };
 
 // ========================================================

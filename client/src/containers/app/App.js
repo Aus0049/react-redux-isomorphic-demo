@@ -1,20 +1,25 @@
-import React, { Component } from 'react';
-import { Router } from 'react-router'
+import React  from 'react';
+import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import Header from "components/header"
-import history from "../../store/history"
+import Routes from '../../routes'
+import Layout from "../../layout"
 
-class App extends Component {
+const supportsHistory = 'pushState' in window.history
+
+// 这个项目的容器
+class App extends React.PureComponent {
   render() {
-      const { routes, store } = this.props;
+      const { store } = this.props;
 
       return (
           <Provider store={store}>
-              <div className="app-container">
-                  <Header/>
-                  {/*eslint react/no-children-prop: "off"*/}
-                  <Router history={history} children={routes} />
-              </div>
+              <BrowserRouter forceRefresh={!supportsHistory}>
+                  <Layout>
+                      <Header/>
+                      <Routes />
+                  </Layout>
+              </BrowserRouter>
           </Provider>
       );
   }
