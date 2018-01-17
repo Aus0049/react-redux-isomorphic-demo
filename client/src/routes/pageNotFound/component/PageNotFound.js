@@ -12,7 +12,7 @@ class PageNotFound extends Component {
             <div>
                 <h1>Page not found!!!</h1>
                 <h3>
-                    <a onClick={props.router.goBack}>Back</a>
+                    <a onClick={props.history.goBack}>Back</a>
                 </h3>
             </div>
         )
