@@ -84,7 +84,9 @@ Notice.propTypes = {
 
 Notice.defaultProps = {
     prefixCls: 'zby-notice',
-    duration: 3000,
+    type: 'info',
+    iconClass: '',
+    content: '',
     onClose: empty
 };
 

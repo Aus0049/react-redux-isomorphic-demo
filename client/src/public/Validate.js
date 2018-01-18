@@ -48,21 +48,27 @@ const Validate = (validateArray) => {
 
         // 4.type
         switch (type) {
-            case 'email':
+            case 'email': {
                 if(!verifyEmail(id, name, value, errorText)){
                     continue;
                 }
                 break;
-            case 'phone':
+            }
+            case 'phone': {
                 if(!verifyPhone(id, name, value, errorText)){
                     continue;
                 }
                 break;
-            case 'number':
+            }
+            case 'number': {
                 if(!verifyNumber(id, name, value, errorText, min, max)){
                     continue;
                 }
                 break;
+            }
+            default: {
+                break;
+            }
         }
     }
 
