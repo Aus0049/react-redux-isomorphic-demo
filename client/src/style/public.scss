@@ -2,11 +2,6 @@
 
 @import './base';
 
-// body
-body {
-  background: #fff;
-}
-
 // 基本样式
 p, ul, li {
   margin: 0;
@@ -49,6 +44,10 @@ p, ul, li {
 
 .page-container {
   margin-top: 45px;
+}
+
+.home-container {
+  background: #fff;
 }
 
 

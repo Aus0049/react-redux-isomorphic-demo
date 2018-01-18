@@ -99,6 +99,7 @@
   "proxy": "http://localhost:9000",
   "theme": {
     "brand-primary": "#00b4a5",
+    "brand-primary-tap": "#009486",
     "color-text-base": "#333"
   }
 }

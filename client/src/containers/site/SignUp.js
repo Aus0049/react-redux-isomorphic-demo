@@ -1,0 +1,82 @@
+/**
+ * Created by Aus on 2018/1/18.
+ */
+import React from 'react';
+import {List, InputItem, Button, WingBlank, WhiteSpace} from 'antd-mobile';
+import Validate from 'public/Validate';
+import Toast from 'components/toast';
+
+// 注册
+class SignUp extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            username: '',
+            phone: '',
+            password: ''
+        };
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+    handleInputChange (type, val) {
+        this.setState({[type]: val});
+    }
+    handleSubmit () {
+        // 验证
+        const {username, password} = this.state;
+
+        const validate = Validate([
+            {name: "用户名", value: username, require: true, length: true, min: 3, max: 10},
+            {name: "密码", value: password, require: true, length: true, min: 6, max: 10}
+        ]);
+
+        if(validate.length > 0){
+            Toast.error(validate[0].error);
+            return;
+        }
+
+        // 发送请求
+    }
+    render () {
+        const {username, phone, password} = this.state;
+
+        return (
+            <div className="sign-up-container">
+                <List
+                    renderHeader={() => '注册成为用户'}
+                >
+                    <InputItem
+                        value={username}
+                        placeholder="3位到10位用户名"
+                        onChange={this.handleInputChange.bind(this, 'username')}
+                    >
+                        用户名
+                    </InputItem>
+                    <InputItem
+                        value={phone}
+                        type='phone'
+                        placeholder="11位手机号"
+                        onChange={this.handleInputChange.bind(this, 'phone')}
+                    >
+                        手机号
+                    </InputItem>
+                    <InputItem
+                        value={password}
+                        type='password'
+                        placeholder="6位到10位密码"
+                        onChange={this.handleInputChange.bind(this, 'password')}
+                    >
+                        密码
+                    </InputItem>
+                </List>
+
+                <WingBlank size="lg">
+                    <WhiteSpace size="lg" />
+                    <Button type="primary" onClick={this.handleSubmit}>注册</Button>
+                    <WhiteSpace size="lg" />
+                </WingBlank>
+            </div>
+        );
+    }
+}
+
+export default SignUp

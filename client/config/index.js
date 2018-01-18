@@ -20,6 +20,7 @@ const config = {
     // ----------------------------------
     path_base: path.resolve(__dirname, '..'),
     components: path.resolve(__dirname, '../src/components'),
+    public_func: path.resolve(__dirname, '../src/public'),
     static_style: path.resolve(__dirname, '../src/style/'),
     dir_client: 'src',
     dir_dist: 'dist',
