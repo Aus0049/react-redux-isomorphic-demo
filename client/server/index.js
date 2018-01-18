@@ -7,6 +7,7 @@ const path = require('path')
 const webpack = require('webpack')
 const webpackConfig = require('../build/webpack.config')
 const config = require('../config')
+const proxy = require('http-proxy-middleware')
 
 const app = express()
 const paths = config.utils_paths
@@ -31,6 +32,21 @@ if (config.env === 'development') {
     app.use(require('webpack-hot-middleware')(compiler));
 
     app.use(express['static'](paths.client('static')));
+
+    // context可以是单个字符串，也可以是多个字符串数组，分别对应你需要代理的api,星号（*）表示匹配当前路径下面的所有api
+    const context = [`/api/*`];
+
+    // options可选的配置参数请自行看readme.md文档，通常只需要配置target，也就是你的api所属的域名。
+    const options = {
+        target: 'http://localhost:9000/',
+        changeOrigin: true
+    };
+
+    // 将options对象用proxy封装起来，作为参数传递
+    const apiProxy = proxy(options);
+
+    // 现在你只需要执行这一行代码，当你访问需要跨域的api资源时，就可以成功访问到了。
+    app.use(context, apiProxy);
 
     app.use('*', (req, res, next) => {
         const filename = path.join(compiler.outputPath, 'index.html')

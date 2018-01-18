@@ -5,6 +5,11 @@ import React from 'react';
 import {List, InputItem, Button, WingBlank, WhiteSpace} from 'antd-mobile';
 import Validate from 'public/Validate';
 import Toast from 'components/toast';
+import {actionCreators} from './store/actions';
+import CryptoJS from 'crypto-js';
+
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
 // 注册
 class SignUp extends React.Component {
@@ -22,7 +27,7 @@ class SignUp extends React.Component {
     }
     handleSubmit () {
         // 验证
-        const {username, password} = this.state;
+        const {username, phone, password} = this.state;
 
         const validate = Validate([
             {name: "用户名", value: username, require: true, length: true, min: 3, max: 10},
@@ -35,6 +40,10 @@ class SignUp extends React.Component {
         }
 
         // 发送请求
+        this.props.dispatch(actionCreators.fetchSignUp(username, phone, password))
+            .then((result)=>{
+                console.log(result);
+            });
     }
     render () {
         const {username, phone, password} = this.state;
@@ -79,4 +88,8 @@ class SignUp extends React.Component {
     }
 }
 
-export default SignUp
+const mapStateToProps = (state) => ({
+    site: state.site
+});
+
+export default connect(mapStateToProps,dispatch=> {return { ...bindActionCreators(actionCreators, dispatch), dispatch }})(SignUp)

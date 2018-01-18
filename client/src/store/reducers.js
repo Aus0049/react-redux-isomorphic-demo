@@ -3,9 +3,11 @@
  */
 import { combineReducers } from 'redux'
 import home from '../containers/home/store'
+import site from '../containers/site/store'
 
 export const makeRootReducer = () => combineReducers({
-    home
+    home,
+    site
 });
 
 // export const injectReducer = (store, { key, reducer }) => {
