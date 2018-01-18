@@ -3,12 +3,53 @@
  */
 import React from 'react'
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import { Link } from 'react-router-dom';
-import Icon from 'component-font-awesome'
+import Icon from 'component-font-awesome';
+import moment from 'moment';
 import '../style/list.scss';
 
 const List = (props) => {
-    const {headImgUrl, name, content} = props;
+    const { headImgUrl, name, content, images, createTime, isLiked, comments } = props;
+
+    let imagesDOM, commentDOM;
+
+    // 处理图片dom
+    if (images.length !== 0) {
+        const imageItems = [];
+
+        if(images.length === 1){
+            // 一张图片 尺寸特殊处理
+            imageItems.push(
+                <div key="one" className="img-box one">
+                    <img src={images[0].url} alt=""/>
+                </div>
+            );
+        } else {
+            images.map((item)=>{
+                imageItems.push(
+                    <div key={item.url} className={classNames(['img-box', {'four': images.length === 4}])}>
+                        <img src={item.url} alt=""/>
+                    </div>
+                );
+            });
+        }
+
+        imagesDOM =
+            <div className="list-img">
+                {imageItems}
+            </div>;
+    }
+
+    // 处理评论
+    commentDOM = comments.map((item)=>(
+        <li key={item.id} className="comment">
+            <p className="name">{item.from.name}</p>
+            {item.to ? <p className="content">回复</p> : null}
+            {item.to ? <p className="name">{item.to.name}</p> : null}
+            <p className="content">: {item.content}</p>
+        </li>
+    ));
 
     return (
         <div className="list-container">
@@ -20,51 +61,14 @@ const List = (props) => {
                     <Link className="name" to={'/user'}>{name}</Link>
                     <p className="content">{content}</p>
                 </div>
-                <div className="list-img">
-                    <div className="img-box">
-                        <img src="" alt=""/>
-                    </div>
-                    <div className="img-box">
-                        <img src="" alt=""/>
-                    </div>
-                    <div className="img-box">
-                        <img src="" alt=""/>
-                    </div>
-                    <div className="img-box">
-                        <img src="" alt=""/>
-                    </div>
-                    <div className="img-box">
-                        <img src="" alt=""/>
-                    </div>
-                    <div className="img-box">
-                        <img src="" alt=""/>
-                    </div>
-                    <div className="img-box">
-                        <img src="" alt=""/>
-                    </div>
-                    <div className="img-box">
-                        <img src="" alt=""/>
-                    </div>
-                    <div className="img-box">
-                        <img src="" alt=""/>
-                    </div>
-                </div>
+                {imagesDOM}
                 <ul className="list-comment">
                     <li className="time-box">
-                        <p className="time">37分钟前</p>
+                        <p className="time">{moment.unix(createTime).fromNow()}</p>
                         <Icon type="ellipsis-h" />
-                        <Icon type="thumbs-o-up" />
+                        <Icon type={isLiked ? 'thumbs-up' : 'thumbs-o-up'} />
                     </li>
-                    <li className="comment">
-                        <p className="name">赵聪</p>
-                        <p className="content">: Dsadsadsadsadsadsadsad</p>
-                    </li>
-                    <li className="comment">
-                        <p className="name">赵聪</p>
-                        <p className="content">回复</p>
-                        <p className="name">发力期</p>
-                        <p className="content">: sdsadsadsadsadsadsa</p>
-                    </li>
+                    {commentDOM}
                 </ul>
             </div>
         </div>
@@ -75,12 +79,20 @@ List.propTypes = {
     headImgUrl: PropTypes.string,
     name: PropTypes.string,
     content: PropTypes.string,
+    images: PropTypes.array,
+    createTime: PropTypes.number,
+    isLiked: PropTypes.bool,
+    comments: PropTypes.array,
 };
 
 List.defaultProps = {
     headImgUrl: '',
-    name: 'dsadsa',
-    content: 'dsadsdsadsadsadsadsadsa'
+    name: '',
+    content: '',
+    images: [],
+    createTime: 0,
+    isLiked: false,
+    comments: []
 };
 
 export default List;

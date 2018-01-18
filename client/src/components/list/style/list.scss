@@ -5,6 +5,8 @@
 // list
 .list-container {
   display: flex;
+  padding: 15px 20px;
+  border-bottom: 1px solid #e7e7e7;
 
   .list-head-box {
     display: block;
@@ -52,7 +54,6 @@
     .one {
       width: 80px;
       height: 120px;
-      margin: 0;
     }
 
     // 四张照片 四宫格

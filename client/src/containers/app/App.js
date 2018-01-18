@@ -1,9 +1,13 @@
 import React  from 'react';
-import { BrowserRouter } from 'react-router-dom'
-import { Provider } from 'react-redux'
-import Header from "components/header"
-import Routes from '../../routes'
-import Layout from "../../layout"
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import Header from 'components/header';
+import Routes from '../../routes';
+import Layout from '../../layout';
+import moment from 'moment';
+
+// 全局这是moment中文
+moment.locale('zh-cn');
 
 const supportsHistory = 'pushState' in window.history
 
