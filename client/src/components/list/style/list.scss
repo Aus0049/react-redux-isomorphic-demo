@@ -35,6 +35,34 @@
     }
   }
 
+  .list-img {
+    overflow: hidden;
+
+    .img-box {
+      float: left;
+      margin-right: 10px;
+      margin-top: 10px;
+      width: 75px;
+      height: 75px;
+      overflow: hidden;
+      background: #ccc;
+    }
+
+    // 一张照片 尺寸自适应
+    .one {
+      width: 80px;
+      height: 120px;
+      margin: 0;
+    }
+
+    // 四张照片 四宫格
+    .four {
+      &:nth-of-type(3) {
+        clear: both;
+      }
+    }
+  }
+
   .list-comment {
     margin: 0;
     padding: 0;
@@ -53,7 +81,44 @@
       .icon {
         display: inline-block;
         float: right;
+        margin-left: 10px;
         font-size: 18px;
+        color: #94accb;
+      }
+    }
+
+    .comment {
+      display: block;
+      padding: 0 5px;
+      background: #f4f4f4;
+      font-size: 14px;
+      line-height: 24px;
+      word-wrap: break-word;
+
+      .name {
+        display: inline;
+        color: #5b6f8f;
+      }
+
+      .content {
+        display: inline;
+      }
+    }
+
+    li:nth-of-type(2) {
+      position: relative;
+
+      &:after {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: -20px;
+        width: 0;
+        height: 0;
+        border-top: 10px solid transparent;
+        border-right: 10px solid transparent;
+        border-left: 10px solid transparent;
+        border-bottom: 10px solid #f4f4f4;
       }
     }
   }

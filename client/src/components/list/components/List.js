@@ -20,13 +20,51 @@ const List = (props) => {
                     <Link className="name" to={'/user'}>{name}</Link>
                     <p className="content">{content}</p>
                 </div>
-                <div className="list-img"></div>
+                <div className="list-img">
+                    <div className="img-box">
+                        <img src="" alt=""/>
+                    </div>
+                    <div className="img-box">
+                        <img src="" alt=""/>
+                    </div>
+                    <div className="img-box">
+                        <img src="" alt=""/>
+                    </div>
+                    <div className="img-box">
+                        <img src="" alt=""/>
+                    </div>
+                    <div className="img-box">
+                        <img src="" alt=""/>
+                    </div>
+                    <div className="img-box">
+                        <img src="" alt=""/>
+                    </div>
+                    <div className="img-box">
+                        <img src="" alt=""/>
+                    </div>
+                    <div className="img-box">
+                        <img src="" alt=""/>
+                    </div>
+                    <div className="img-box">
+                        <img src="" alt=""/>
+                    </div>
+                </div>
                 <ul className="list-comment">
                     <li className="time-box">
                         <p className="time">37分钟前</p>
-                        <Icon className="icon" type="ellipsis-h"></Icon>
+                        <Icon type="ellipsis-h" />
+                        <Icon type="thumbs-o-up" />
                     </li>
-                    <li className="comment"></li>
+                    <li className="comment">
+                        <p className="name">赵聪</p>
+                        <p className="content">: Dsadsadsadsadsadsadsad</p>
+                    </li>
+                    <li className="comment">
+                        <p className="name">赵聪</p>
+                        <p className="content">回复</p>
+                        <p className="name">发力期</p>
+                        <p className="content">: sdsadsadsadsadsadsa</p>
+                    </li>
                 </ul>
             </div>
         </div>
