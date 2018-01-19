@@ -3,7 +3,7 @@
  */
 const mongoose = require('mongoose');
 const logger   = require('../common/logger');
-const config = require('../config');
+const config = require('../config/index');
 
 if (config.debug) {
     var traceMQuery = function (method, info, query) {
