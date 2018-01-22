@@ -6,7 +6,6 @@ import {List, InputItem, Button, WingBlank, WhiteSpace} from 'antd-mobile';
 import Validate from 'public/Validate';
 import Toast from 'components/toast';
 import {actionCreators} from './store/actions';
-import CryptoJS from 'crypto-js';
 
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
@@ -23,6 +22,12 @@ class SignUp extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     handleInputChange (type, val) {
+
+        if(type === 'phone') {
+            this.setState({[type]: val.split(' ').join('')});
+            return;
+        }
+
         this.setState({[type]: val});
     }
     handleSubmit () {
@@ -30,7 +35,7 @@ class SignUp extends React.Component {
         const {username, phone, password} = this.state;
 
         const validate = Validate([
-            {name: "用户名", value: username, require: true, length: true, min: 3, max: 10},
+            {name: "用户名", value: username, require: true, length: true, min: 2, max: 10},
             {name: "密码", value: password, require: true, length: true, min: 6, max: 10}
         ]);
 
@@ -42,7 +47,22 @@ class SignUp extends React.Component {
         // 发送请求
         this.props.dispatch(actionCreators.fetchSignUp(username, phone, password))
             .then((result)=>{
-                console.log(result);
+                if(result.status){
+                    Toast.success(result.message, ()=>{
+                        // 跳到首页
+                        this.props.history.push('/');
+                    });
+                    return;
+                }
+
+                if(result.data){
+                    for(let i in result.data){
+                        Toast.error(result.data[i]);
+                        return;
+                    }
+                } else {
+                    Toast.error(result.message);
+                }
             });
     }
     render () {

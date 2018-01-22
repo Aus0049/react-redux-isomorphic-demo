@@ -16,13 +16,13 @@ function signUpUser (username, phone, password) {
         // 用户名验重
         Users.findAsync({username: username})
             .then((users)=> {
-                if(users || users.length > 0){
+                if(users && users.length > 0){
                     reject({username: '用户名已被占用!'});
                 }
             })
             .then(()=>(Users.findAsync({phone: phone})))
             .then((users)=>{
-                if(users || users.length > 0){
+                if(users && users.length > 0){
                     reject({username: '手机号已被占用!'});
                 }
             })
@@ -30,13 +30,13 @@ function signUpUser (username, phone, password) {
                 const user = new Users();
 
                 user.username = username;
-                user.phone = phone;
+                user.phone = Number.parseInt(phone, 10);
                 user.password = password;
 
                 return user.saveAsync()
             })
             .then((user)=>(resolve()))
-            .catch((err)=>(reject()));
+            .catch((err)=>(reject(err)));
     });
 }
 

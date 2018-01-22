@@ -102,8 +102,6 @@ const verifyRequire = (id, name, value, errorText) => {
         pass = false;
     }
 
-    console.log(validateErrorText);
-
     return pass;
 };
 
