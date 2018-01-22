@@ -12,10 +12,20 @@ router.post('/sign-up', function (req, res, next) {
     // 注册
     const {username, phone, password} = req.body;
     // 用户名验重 手机号验重
-    const result = Users.signUpUser(username, phone, password);
-    console.log(1111);
-    console.log(result);
-    res.send(result);
+    Users.signUpUser(username, phone, password)
+        .then(()=>{
+            res.send(createResultObj(true, '注册成功!'));
+        })
+        .catch((errs)=>{
+            res.send(createResultObj(false, '注册失败!', errs));
+        });
+});
+
+// 公共方法
+const createResultObj = (status = true, message = '', data = null) => ({
+    status: status,
+    message: message,
+    data: data,
 });
 
 module.exports = router;

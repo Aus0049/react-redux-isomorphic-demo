@@ -12,45 +12,33 @@ const {Users} = require('../models');
  * @callback {} 返回结果
  */
 function signUpUser (username, phone, password) {
-    // 用户名验重
-    // const repeatUsername = findUserByUsername(username);
-    //
-    // repeatUsername
+    return new Promise((resolve, reject)=>{
+        // 用户名验重
+        Users.findAsync({username: username})
+            .then((users)=> {
+                if(users || users.length > 0){
+                    reject({username: '用户名已被占用!'});
+                }
+            })
+            .then(()=>(Users.findAsync({phone: phone})))
+            .then((users)=>{
+                if(users || users.length > 0){
+                    reject({username: '手机号已被占用!'});
+                }
+            })
+            .then(()=>{
+                const user = new Users();
 
+                user.username = username;
+                user.phone = phone;
+                user.password = password;
 
-        // .then((err, repeatUsernameUser)=>{
-        //     if(repeatUsernameUser){
-        //         // 重复
-        //         return createResultObj(false, {username: '用户名重复'});
-        //     }
-        //
-        //     Users.findOne({phone: phone})
-        //         .then((err, repeatPhoneUser)=>{
-        //             if(repeatPhoneUser){
-        //                 // 重复
-        //                 return createResultObj(false, {phone: '用户手机号重复'});
-        //             }
-        //
-        //             // 没重复
-        //             console.log('没重复 可以存入');
-        //             return createResultObj(true);
-        //         });
-        // });
-    // 手机号验重
-};
-
-const findUserByUsername = ( username ) => {
-    return Users.findOne({username: username})
-        .then((err, user) => {
-            return user;
-        });
-};
-
-const createResultObj = ( status = true, data ) => ({
-    status: status,
-    message: null,
-    data: data,
-});
+                return user.saveAsync()
+            })
+            .then((user)=>(resolve()))
+            .catch((err)=>(reject()));
+    });
+}
 
 module.exports = {
     signUpUser
