@@ -17,7 +17,8 @@ class SignUp extends React.Component {
         this.state = {
             username: '',
             phone: '',
-            password: ''
+            password: '',
+            btnLoading: false,
         };
         this.handleSubmit = this.handleSubmit.bind(this);
     }
@@ -44,12 +45,16 @@ class SignUp extends React.Component {
             return;
         }
 
+        this.setState({btnLoading: true});
+
         // 发送请求
         this.props.dispatch(actionCreators.fetchSignUp(username, phone, password))
             .then((result)=>{
+                this.setState({btnLoading: false});
                 if(result.status){
-                    Toast.success(result.message, ()=>{
+                    Toast.success(result.message, (user)=>{
                         // 跳到首页
+                        this.props.dispatch(actionCreators.updatePersonalInfo({username, phone: user.phone}));
                         this.props.history.push('/');
                     });
                     return;
@@ -66,7 +71,7 @@ class SignUp extends React.Component {
             });
     }
     render () {
-        const {username, phone, password} = this.state;
+        const {username, phone, password, btnLoading} = this.state;
 
         return (
             <div className="sign-up-container">
@@ -100,8 +105,16 @@ class SignUp extends React.Component {
 
                 <WingBlank size="lg">
                     <WhiteSpace size="lg" />
-                    <Button type="primary" onClick={this.handleSubmit}>注册</Button>
+                    <Button
+                        type="primary"
+                        onClick={this.handleSubmit}
+                        loading={btnLoading}
+                        disabled={btnLoading}
+                    >
+                        注册
+                    </Button>
                     <WhiteSpace size="lg" />
+                    <Button onClick={()=>{this.props.history.push('/sign-in')}}>登录</Button>
                 </WingBlank>
             </div>
         );

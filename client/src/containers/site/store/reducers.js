@@ -4,11 +4,20 @@
 import * as actionType from './actionTypes'
 
 const siteInitialState = {
-    list: 111,
+    username: '',
+    phone: ''
 };
 
 export default function siteReducer (state = {...siteInitialState}, action) {
     switch (action.type) {
+        case actionType.SITE_UPDATE_PERSONAL_INFO : {
+            const {username, phone} = action.payload;
+
+            state.username = username;
+            state.phone = phone;
+
+            return {...state};
+        }
         default : {
             return {...state};
         }

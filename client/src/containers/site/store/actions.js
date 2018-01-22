@@ -7,6 +7,7 @@ import * as actionType from './actionTypes'
 
 const apiRoutePrefix = '/api';
 
+// 注册
 function fetchSignUp (username, phone, password) {
     return (dispatch, getState) => {
         return axios.post(`${apiRoutePrefix}/users/sign-up`, {
@@ -19,6 +20,27 @@ function fetchSignUp (username, phone, password) {
     }
 }
 
+// 登录
+function fetchSignIn (username, password) {
+    return (dispatch, getState) => {
+        return axios.post(`${apiRoutePrefix}/users/sign-in`, {
+            username: username,
+            password: CryptoJS.MD5(password).toString()
+        })
+            .then(response => response.data)
+            .catch(response => response.data)
+    }
+}
+
+// 存储个人信息
+const updatePersonalInfo = (obj) => ({
+    type: actionType.SITE_UPDATE_PERSONAL_INFO,
+    payload: obj
+});
+
 export const actionCreators = {
-    fetchSignUp
+    fetchSignUp,
+    fetchSignIn,
+
+    updatePersonalInfo
 };

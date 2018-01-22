@@ -18,6 +18,10 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(session({
+    secret: 'sessionID', // 建议使用 128 个字符的随机字符串
+    cookie: { maxAge: 60 * 1000 }
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 配置数据库

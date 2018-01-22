@@ -40,6 +40,23 @@ function signUpUser (username, phone, password) {
     });
 }
 
+function signInUser (username, password) {
+    return new Promise((resolve, reject)=>{
+        Users.findAsync({username: username, password: password}, {username: 1, phone: 1, _id: 0})
+            .then((users)=>{
+                if(users && users.length === 1){
+                    resolve(users[0]);
+                }
+
+                reject({user: '用户名密码不匹配'});
+            })
+            .catch((err)=>{
+                reject(err);
+            });
+    });
+}
+
 module.exports = {
-    signUpUser
+    signUpUser,
+    signInUser
 };
