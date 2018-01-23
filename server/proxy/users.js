@@ -2,6 +2,7 @@
  * Created by Aus on 2018/1/19.
  */
 const {Users} = require('../models');
+const logger = require('../public/js/logger').getLogger('proxy');
 
 /**
  * 注册
@@ -12,6 +13,7 @@ const {Users} = require('../models');
  * @callback {} 返回结果
  */
 function signUpUser (username, phone, password) {
+    logger.info('注册开始');
     return new Promise((resolve, reject)=>{
         // 用户名验重
         Users.findAsync({username: username})
@@ -41,6 +43,7 @@ function signUpUser (username, phone, password) {
 }
 
 function signInUser (username, password) {
+    logger.info('登录开始');
     return new Promise((resolve, reject)=>{
         Users.findAsync({username: username, password: password}, {username: 1, phone: 1, _id: 0})
             .then((users)=>{

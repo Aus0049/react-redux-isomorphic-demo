@@ -1,10 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const {Users} = require('../proxy');
+const logger = require('../public/js/logger').getLogger('route');
 
 // users模块下的路径
 // 注册
 router.post('/sign-up', function (req, res, next) {
+    logger.info('注册接口调用');
     // 注册
     const {username, phone, password} = req.body;
     // 用户名验重 手机号验重
@@ -15,9 +17,13 @@ router.post('/sign-up', function (req, res, next) {
                 username,
                 phone
             };
+
+            // 打log
+            logger.info(`注册成功：${username} ${phone}`);
             res.send(createResultObj(true, '注册成功!'));
         })
         .catch((errs)=>{
+            logger.info(`注册失败：${username} ${phone}`);
             res.send(createResultObj(false, '注册失败!', errs));
         });
 });
@@ -34,9 +40,11 @@ router.post('/sign-in', function (req, res, next) {
                 username,
                 phone: user.phone
             };
+            logger.info(`登录成功：${username}`);
             res.send(createResultObj(true, '登录成功!', {user: user}));
         })
         .catch((errs)=>{
+            logger.info(`登录失败：${username}`);
             res.send(createResultObj(false, '登录失败!', errs));
         });
 });

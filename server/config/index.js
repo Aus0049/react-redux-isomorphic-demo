@@ -14,7 +14,10 @@ const config = {
         path: path.join(__dirname, 'public/upload/'),
         url: '/public/upload/'
     },
+
     file_limit: '1MB',
+
+    log_dir: path.join(__dirname, 'logs'),
 };
 
 module.exports = config;
