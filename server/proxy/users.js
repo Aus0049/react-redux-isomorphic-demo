@@ -3,6 +3,7 @@
  */
 const {Users} = require('../models');
 const logger = require('../config/logger_config').getLogger('proxy');
+const bcrypt = require('bcryptjs');
 
 /**
  * 注册
@@ -37,7 +38,7 @@ function signUpUser (username, phone, password) {
 
                 return user.saveAsync()
             })
-            .then((user)=>(resolve()))
+            .then((user)=>(resolve(user)))
             .catch((err)=>(reject(err)));
     });
 }
@@ -45,7 +46,7 @@ function signUpUser (username, phone, password) {
 function signInUser (username, password) {
     logger.info('登录开始');
     return new Promise((resolve, reject)=>{
-        Users.findAsync({username: username, password: password}, {username: 1, phone: 1, _id: 0})
+        Users.findAsync({username: username, password: password})
             .then((users)=>{
                 if(users && users.length === 1){
                     resolve(users[0]);
