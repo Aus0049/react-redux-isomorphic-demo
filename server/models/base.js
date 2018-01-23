@@ -1,7 +1,7 @@
 /**
  * Created by Aus on 2018/1/19.
  */
-const tools = require('../public/js/tools');
+const tools = require('../common/tools');
 
 module.exports = function (schema) {
     //获取当前数据的创建时间

@@ -3,7 +3,7 @@
  */
 const config = require('./index');
 const mongoose = require('mongoose');
-const logger = require('../public/js/logger').getLogger('mongo');
+const logger = require('./logger_config').getLogger('mongo');
 
 mongoose.connect(config.db, {poolSize: 20})
     .then(()=>{

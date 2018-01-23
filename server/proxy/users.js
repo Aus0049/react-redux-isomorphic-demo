@@ -2,7 +2,7 @@
  * Created by Aus on 2018/1/19.
  */
 const {Users} = require('../models');
-const logger = require('../public/js/logger').getLogger('proxy');
+const logger = require('../config/logger_config').getLogger('proxy');
 
 /**
  * 注册

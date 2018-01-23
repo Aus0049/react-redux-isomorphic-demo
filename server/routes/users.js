@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {Users} = require('../proxy');
-const logger = require('../public/js/logger').getLogger('route');
+const logger = require('../config/logger_config').getLogger('route');
 
 // users模块下的路径
 // 注册
