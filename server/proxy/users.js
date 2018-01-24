@@ -3,7 +3,9 @@
  */
 const {Users} = require('../models');
 const logger = require('../config/logger_config').getLogger('proxy');
-const bcrypt = require('bcryptjs');
+const Redis = require('../common/cache');
+const Secret = require('../common/secret');
+const crypto = require('crypto');
 
 /**
  * 注册
@@ -15,49 +17,91 @@ const bcrypt = require('bcryptjs');
  */
 function signUpUser (username, phone, password) {
     logger.info('注册开始');
-    return new Promise((resolve, reject)=>{
-        // 用户名验重
-        Users.findAsync({username: username})
-            .then((users)=> {
-                if(users && users.length > 0){
-                    reject({username: '用户名已被占用!'});
-                }
-            })
-            .then(()=>(Users.findAsync({phone: phone})))
-            .then((users)=>{
-                if(users && users.length > 0){
-                    reject({username: '手机号已被占用!'});
-                }
-            })
+
+    return new Promise(function (resolve, reject) {
+        findUserByUsernameAndPhone(username, phone)
             .then(()=>{
+                logger.info('开始创建用户');
                 const user = new Users();
 
                 user.username = username;
                 user.phone = Number.parseInt(phone, 10);
                 user.password = password;
 
-                return user.saveAsync()
+                return user.saveAsync();
             })
-            .then((user)=>(resolve(user)))
-            .catch((err)=>(reject(err)));
+            .then((user)=>{
+                logger.info('用户创建成功');
+                logger.info('写入redis登录状态');
+
+                // 写redis
+                const userInfo = setRedis(user);
+
+                logger.info('写入redis登录状态结束');
+                resolve(userInfo);
+            })
+            .catch((err)=>{
+                logger.info('注册失败');
+                logger.info(err);
+                reject(err);
+            });
     });
 }
 
 function signInUser (username, password) {
     logger.info('登录开始');
+
     return new Promise((resolve, reject)=>{
-        Users.findAsync({username: username, password: password})
+        // 密码加密
+        const shasum = crypto.createHash('sha1');
+        shasum.update(password);
+        const hasPassword = shasum.digest('hex');
+
+        Users.findAsync({username: username, password: hasPassword})
             .then((users)=>{
                 if(users && users.length === 1){
-                    resolve(users[0]);
+                    const user = users[0];
+                    // 写session
+                    const userInfo = setRedis(user);
+
+                    resolve(userInfo);
                 }
 
                 reject({user: '用户名密码不匹配'});
             })
             .catch((err)=>{
+                logger.info('登录失败');
+                logger.info(err);
                 reject(err);
             });
     });
+}
+
+function findUserByUsernameAndPhone (username, phone) {
+    return new Promise(function (resolve, reject) {
+        Users.findAsync({$or: [{username: username}, {phone: phone}]})
+            .then((users)=>{
+                if(users && users.length > 0){
+                    logger.info('用户名或手机号已被占用, 注册失败');
+                    return reject({username: '用户名或手机号已被占用!'});
+                }
+
+                resolve();
+            })
+    });
+}
+
+function setRedis(user) {
+    const sessionId = Secret.getSessionId(user._id.toString());
+    const userInfo = {
+        userId: user._id,
+        username: user.username,
+        phone: user.phone
+    };
+
+    Redis.set(sessionId, userInfo);
+
+    return userInfo;
 }
 
 module.exports = {

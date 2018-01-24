@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const {Users} = require('../proxy');
 const logger = require('../config/logger_config').getLogger('route');
-const Redis = require('../common/cache');
-const Secret = require('../common/secret');
 
 // users模块下的路径
 // 注册
@@ -12,17 +10,7 @@ router.post('/sign-up', function (req, res, next) {
     const {username, phone, password} = req.body;
     // 用户名验重 手机号验重
     Users.signUpUser(username, phone, password)
-        .then((user)=>{
-            // 写redis
-            const sessionId = Secret.getSessionId(user._id.toString());
-            const userInfo = {
-                userId: user._id,
-                username: user.username,
-                phone: user.phone
-            };
-
-            Redis.set(sessionId, userInfo);
-
+        .then((userInfo)=>{
             // 打log
             logger.info(`注册成功：${username} ${phone}`);
             res.send(createResultObj(true, '注册成功!', userInfo));
@@ -41,11 +29,6 @@ router.post('/sign-in', function (req, res, next) {
     // 用户名验重 手机号验重
     Users.signInUser(username, password)
         .then((user)=>{
-            // 写session
-            req.session.user = {
-                username,
-                phone: user.phone
-            };
             logger.info(`登录成功：${username}`);
             res.send(createResultObj(true, '登录成功!', {user: user}));
         })

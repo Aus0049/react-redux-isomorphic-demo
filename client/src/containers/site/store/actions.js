@@ -24,7 +24,7 @@ function fetchSignIn (username, password) {
     return (dispatch, getState) => {
         return axios.post(`${apiRoutePrefix}/users/sign-in`, {
             username: username,
-            password: CryptoJS.MD5(password).toString()
+            password: password
         })
             .then(response => response.data)
             .catch(response => response.data)

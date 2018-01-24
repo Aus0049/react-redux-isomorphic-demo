@@ -4,8 +4,7 @@
 const mongoose = require('mongoose');
 const BaseModel = require('./base');
 const Schema = mongoose.Schema;
-const bcrypt = require('bcryptjs');
-const config = require('../config/');
+const crypto = require('crypto');
 
 const UsersSchema = new Schema({
     username: {
@@ -33,16 +32,12 @@ const UsersSchema = new Schema({
 UsersSchema.pre('save', function (next) {
     const user = this;
     if (!user.isModified('password')) return next();
-    // 随机生成盐
-    bcrypt.genSalt(config.salt_factory, function (err, salt) {
-        if (err) return next(err);
-        // 加盐哈希
-        bcrypt.hash(user.password, salt, function (err, hash) {
-            if (err) return next(err);
-            user.password = hash;
-            next();
-        })
-    })
+
+    const shasum = crypto.createHash('sha1');
+    shasum.update(user.password);
+    user.password = shasum.digest('hex');
+
+    next();
 });
 
 UsersSchema.methods.comparePassword = function (password, cb) {
