@@ -8,16 +8,13 @@ const Secret = require('../common/secret');
 // users模块下的路径
 // 注册
 router.post('/sign-up', function (req, res, next) {
-    logger.info('注册接口调用');
     // 注册
     const {username, phone, password} = req.body;
     // 用户名验重 手机号验重
     Users.signUpUser(username, phone, password)
         .then((user)=>{
             // 写redis
-            logger.info('routes');
             const sessionId = Secret.getSessionId(user._id.toString());
-            logger.info(sessionId);
             const userInfo = {
                 userId: user._id,
                 username: user.username,

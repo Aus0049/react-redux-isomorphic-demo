@@ -9,6 +9,7 @@ const RedisStore = require('connect-redis')(session);
 
 const config = require('./config');
 const redisConfig = require('./config/redis_config');
+const routeLog = require('./middlewares/route_log');
 const users = require('./routes/users');
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(session({
     saveUninitialized: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(routeLog);
 
 // 配置数据库
 require('./config/db_config');
