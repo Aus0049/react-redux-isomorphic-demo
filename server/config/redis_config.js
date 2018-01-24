@@ -12,6 +12,10 @@ const client = new Redis({
     password: config.redis_password
 });
 
+client.on('ready',function() {
+    logger.info('Redis链接成功！😁');
+});
+
 client.on('error', function (err) {
     if (err) {
         logger.error('Redis链接失败！😢');
