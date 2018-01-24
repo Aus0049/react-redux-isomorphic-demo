@@ -15,8 +15,8 @@ router.post('/sign-up', function (req, res, next) {
     Users.signUpUser(username, phone, password)
         .then((user)=>{
             // 写redis
-            logger.info('success');
-            const sessionId = Secret.getSessionId(user);
+            logger.info('routes');
+            const sessionId = Secret.getSessionId(user._id.toString());
             logger.info(sessionId);
             const userInfo = {
                 userId: user._id,

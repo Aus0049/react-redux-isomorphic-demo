@@ -18,7 +18,7 @@ const get = (key) => {
 
             const duration = (new Date() - t);
 
-            logger.info('Cache', 'get', key, (duration + 'ms').green);
+            logger.info('Cache', 'get', key, (duration + 'ms'));
 
             resolve(data);
         });
@@ -43,8 +43,8 @@ const set = (key, value, time, callback) => {
     } else {
         redis.setex(key, time, value, callback);
     }
-    var duration = (new Date() - t);
-    logger.info('Cache', 'set', key, (duration + 'ms').green);
+    const duration = (new Date() - t);
+    logger.info('Cache', 'set', key, (duration + 'ms'));
 };
 
 exports.set = set;

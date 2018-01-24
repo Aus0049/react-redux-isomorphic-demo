@@ -6,12 +6,9 @@ const config  = require('../config');
 const bcrypt = require('bcryptjs');
 
 const getSessionId = (userId) => {
-    console.log('secret');
-    console.log('userId');
-    console.log(userId);
-    const secret = bcrypt.hashSync(userId);
-    console.log(secret);
-    return secret;
+    const salt = bcrypt.genSaltSync(config.salt_factory);
+
+    return bcrypt.hashSync(userId, salt);
 };
 
 exports.getSessionId = getSessionId;

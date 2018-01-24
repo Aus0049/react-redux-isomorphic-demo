@@ -17,6 +17,7 @@ const config = {
     redis_password: '',
 
     session_secret: 'r_r_i_d', // react-redux-isomorphic-demo
+    salt_factory: 10,
 
     upload: {
         path: path.join(__dirname, '../public/upload/'),

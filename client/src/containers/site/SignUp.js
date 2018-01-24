@@ -52,9 +52,9 @@ class SignUp extends React.Component {
             .then((result)=>{
                 this.setState({btnLoading: false});
                 if(result.status){
-                    Toast.success(result.message, (user)=>{
+                    Toast.success(result.message, ()=>{
                         // 跳到首页
-                        this.props.dispatch(actionCreators.updatePersonalInfo({username, phone: user.phone}));
+                        this.props.dispatch(actionCreators.updatePersonalInfo({username, phone}));
                         this.props.history.push('/');
                     });
                     return;
