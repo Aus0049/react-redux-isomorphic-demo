@@ -10,7 +10,9 @@ const RedisStore = require('connect-redis')(session);
 const config = require('./config');
 const redisConfig = require('./config/redis_config');
 const routeLog = require('./middlewares/route_log');
+const signInCheck = require('./middlewares/sign_in_check');
 const users = require('./routes/users');
+const says = require('./routes/says');
 const app = express();
 
 // view engine setup
@@ -29,6 +31,7 @@ app.use(session({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(routeLog);
+app.use(signInCheck);
 
 // 配置数据库
 require('./config/db_config');
@@ -36,5 +39,6 @@ require('./config/db_config');
 // 配置路由
 const routePrefix = '/api';
 app.use(`${routePrefix}/users`, users);
+app.use(`${routePrefix}/say`, says);
 
 module.exports = app;

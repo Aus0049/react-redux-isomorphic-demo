@@ -4,7 +4,7 @@
 import * as actionType from './actionTypes'
 
 const homeInitialState = {
-    list: 111,
+    list: [],
 };
 
 export default function homeReducer (state = {...homeInitialState}, action) {

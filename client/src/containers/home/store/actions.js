@@ -6,9 +6,9 @@ import * as actionType from './actionTypes'
 
 const apiRoutePrefix = '/api';
 
-function getList () {
+function fetchList () {
     return (dispatch, getState) => {
-        return axios.get(`${apiRoutePrefix}/home/get-list`)
+        return axios.get(`${apiRoutePrefix}/say/get-list`)
             .then(response => response.data)
             .then(result => {
                 if(result.status){
@@ -26,7 +26,7 @@ const updateList = (payload) => ({
 });
 
 export const actionCreators = {
-    getList
+    fetchList
 };
 
 export const actions = {
