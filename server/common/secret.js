@@ -5,9 +5,13 @@
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
-const getSessionId = (userId) => {
-    return bcrypt.hashSync(userId);
+// sha1加密方法
+const stringEncryptSha1 = (str) => {
+
+    const shasum = crypto.createHash('sha1');
+    shasum.update(str);
+    return shasum.digest('hex');
 };
 
-exports.getSessionId = getSessionId;
+exports.stringEncryptSha1 = stringEncryptSha1;
 

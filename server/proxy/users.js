@@ -15,93 +15,80 @@ const crypto = require('crypto');
  *
  * @callback {} 返回结果
  */
-function signUpUser (username, phone, password) {
+async function signUpUser(username, phone, password, res) {
     logger.info('注册开始');
 
-    return new Promise(function (resolve, reject) {
-        findUserByUsernameAndPhone(username, phone)
-            .then(()=>{
-                logger.info('开始创建用户');
-                const user = new Users();
+    const users = await Users.findAsync({$or: [{username: username}, {phone: phone}]});
 
-                user.username = username;
-                user.phone = Number.parseInt(phone, 10);
-                user.password = password;
+    if(users && users.length > 0) {
+        logger.info('用户名或手机号已被占用, 注册失败');
+        throw new Error('用户名或手机号已被占用！');
+    }
 
-                return user.saveAsync();
-            })
-            .then((user)=>{
-                logger.info('用户创建成功');
-                logger.info('写入redis登录状态');
+    logger.info('开始创建用户');
 
-                // 写redis
-                const userInfo = setRedis(user);
+    const user = new Users();
 
-                logger.info('写入redis登录状态结束');
-                resolve(userInfo);
-            })
-            .catch((err)=>{
-                logger.info('注册失败');
-                logger.info(err);
-                reject(err);
-            });
-    });
+    user.username = username;
+    user.phone = Number.parseInt(phone, 10);
+    user.password = password;
+
+    const newUser = await user.saveAsync();
+
+    logger.info('用户创建成功');
+    logger.info('写入cookie redis登录状态');
+
+    // 写redis 过期时间一天
+    const [sessionId, userInfo] = setRedis(newUser, 60*60*24);
+
+    // 将sessionId保存到cookie中
+    res.cookie('RRIDSID', sessionId, { expires: new Date(Date.now() + 60*60*24*1000), httpOnly: true });
+
+    logger.info('写入redis登录状态结束');
+
+    return userInfo;
 }
 
-function signInUser (username, password) {
+async function signInUser (username, password, res) {
     logger.info('登录开始');
 
-    return new Promise((resolve, reject)=>{
-        // 密码加密
-        const shasum = crypto.createHash('sha1');
-        shasum.update(password);
-        const hasPassword = shasum.digest('hex');
+    // 密码加密
+    const sha1Password = Secret.stringEncryptSha1(password);
 
-        Users.findAsync({username: username, password: hasPassword})
-            .then((users)=>{
-                if(users && users.length === 1){
-                    const user = users[0];
-                    // 写session
-                    const userInfo = setRedis(user);
+    const user = await Users.findAsync({username: username, password: sha1Password});
 
-                    resolve(userInfo);
-                }
+    if(user && user.length === 0){
+        logger.info('登录失败 用户名密码不匹配');
+        throw new Error('用户名密码不匹配');
+    }
 
-                reject({user: '用户名密码不匹配'});
-            })
-            .catch((err)=>{
-                logger.info('登录失败');
-                logger.info(err);
-                reject(err);
-            });
-    });
+    // 登陆成功
+    logger.info('登录成功');
+    logger.info('写入cookie redis登录状态');
+
+    // 写redis 过期时间一天
+    const [sessionId, userInfo] = setRedis(user[0], 60*60*24);
+
+    // 将sessionId保存到cookie中
+    res.cookie('RRIDSID', sessionId, { expires: new Date(Date.now() + 60*60*24*1000), httpOnly: true });
+
+    logger.info('写入redis登录状态结束');
+
+    return userInfo;
 }
 
-function findUserByUsernameAndPhone (username, phone) {
-    return new Promise(function (resolve, reject) {
-        Users.findAsync({$or: [{username: username}, {phone: phone}]})
-            .then((users)=>{
-                if(users && users.length > 0){
-                    logger.info('用户名或手机号已被占用, 注册失败');
-                    return reject({username: '用户名或手机号已被占用!'});
-                }
-
-                resolve();
-            })
-    });
-}
-
-function setRedis(user) {
-    const sessionId = Secret.getSessionId(user._id.toString());
+// 公共方法
+function setRedis(user, time) {
+    const sessionId = Secret.stringEncryptSha1(user._id.toString());
     const userInfo = {
         userId: user._id,
         username: user.username,
         phone: user.phone
     };
 
-    Redis.set(sessionId, userInfo);
+    Redis.set(sessionId, userInfo, time);
 
-    return userInfo;
+    return [sessionId, userInfo];
 }
 
 module.exports = {

@@ -40,14 +40,6 @@ UsersSchema.pre('save', function (next) {
     next();
 });
 
-UsersSchema.methods.comparePassword = function (password, cb) {
-    // 对比
-    bcrypt.compare(password, this.password, function (err, isMatch) {
-        if (err) { return cb(err) }
-        cb(null, isMatch);
-    })
-};
-
 UsersSchema.plugin(BaseModel);
 UsersSchema.index({_id: 1});
 

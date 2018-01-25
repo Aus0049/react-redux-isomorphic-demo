@@ -25,21 +25,33 @@ const get = (key) => {
 };
 
 // time 参数可选，秒为单位
-const set = (key, value) => {
+const set = (key, value, time) => {
     return new Promise(function (resolve, reject) {
         const startTime = new Date();
 
         value = JSON.stringify(value);
 
-        client.set(key, value, (err, data)=>{
-            if (err) return reject(err);
-            if (!data) return resolve();
+        if(time){
+            client.set(key, value, (err, data)=>{
+                if (err) return reject(err);
+                if (!data) return resolve();
 
-            const duration = (new Date() - startTime);
-            logger.info('Cache', 'set', key, (duration + 'ms'));
+                const duration = (new Date() - startTime);
+                logger.info('Cache', 'set', key, (duration + 'ms'));
 
-            resolve(data);
-        });
+                resolve(data);
+            });
+        } else {
+            client.setex(key, time, value, (err, data)=>{
+                if (err) return reject(err);
+                if (!data) return resolve();
+
+                const duration = (new Date() - startTime);
+                logger.info('Cache', 'set', key, (duration + 'ms').green, 'timeout', (time + 's'));
+
+                resolve(data);
+            });
+        }
     });
 };
 
