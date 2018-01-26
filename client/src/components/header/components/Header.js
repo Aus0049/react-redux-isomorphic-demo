@@ -26,11 +26,31 @@ class Header extends React.Component {
     }
     handleSelect (value) {
         this.setState({isPopoverShow: false});
-        if(value.props.value === 'signOut'){
-            // 注销
-            this.signOut();
-        } else if (value.props.value === 'add') {
-            // 跳转
+
+        switch (value.props.value) {
+            case 'signOut': {
+                // 注销
+                this.signOut();
+
+                break;
+            }
+            case 'add': {
+                // 跳转
+                break;
+            }
+            case 'signIn': {
+                // 跳转
+                this.props.history.push('/sign-in');
+                break;
+            }
+            case 'signUp': {
+                // 跳转
+                this.props.history.push('/sign-up');
+                break;
+            }
+            default: {
+                break;
+            }
         }
     }
     signOut () {
@@ -44,8 +64,20 @@ class Header extends React.Component {
             });
     }
     getOverLayDOM () {
+        const {username, phone} = this.props.site;
         const overlayDOM = [];
 
+        // if(username && phone){
+        //     overlayDOM.push(
+        //         <Item key="signOut" value="signOut" icon={<Icon type="sign-out"/>} >注销</Item>,
+        //         <Item key="add" value="add" icon={<Icon type="plus"/>} >发朋友圈</Item>
+        //     );
+        // } else {
+        //     overlayDOM.push(
+        //         <Item key="signIn" value="signIn" icon={<Icon type="sign-in"/>} >登录</Item>,
+        //         <Item key="signUp" value="signUp" icon={<Icon type="user-plus"/>} >注册</Item>
+        //     );
+        // }
         overlayDOM.push(
             <Item key="signOut" value="signOut" icon={<Icon type="sign-out"/>} >注销</Item>,
             <Item key="add" value="add" icon={<Icon type="plus"/>} >发朋友圈</Item>
@@ -82,7 +114,7 @@ class Header extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-    home: state.home
+    site: state.site
 });
 
 export default withRouter(connect(mapStateToProps,dispatch=> {return { ...bindActionCreators(actionCreators, dispatch), dispatch }})(Header));
