@@ -31,6 +31,15 @@ function fetchSignIn (username, password) {
     }
 }
 
+// 注销
+function fetchSignOut () {
+    return (dispatch, getState) => {
+        return axios.post(`${apiRoutePrefix}/users/sign-out`)
+            .then(response => response.data)
+            .catch(response => response.data)
+    }
+}
+
 // 存储个人信息
 const updatePersonalInfo = (obj) => ({
     type: actionType.SITE_UPDATE_PERSONAL_INFO,
@@ -40,6 +49,7 @@ const updatePersonalInfo = (obj) => ({
 export const actionCreators = {
     fetchSignUp,
     fetchSignIn,
+    fetchSignOut,
 
     updatePersonalInfo
 };

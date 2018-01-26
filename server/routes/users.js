@@ -40,6 +40,25 @@ router.post('/sign-in', function (req, res, next) {
         });
 });
 
+// 登出
+router.post('/sign-out', function (req, res, next) {
+    // 从cookie中找到sessionId
+    const sid = req.cookies.RRIDSID;
+    // 用户名验重 手机号验重
+    Users.signOutUser(sid)
+        .then(()=>{
+            logger.info('登出成功');
+            res.send(createResultObj(true, '登录成功！'));
+        })
+        .catch((err)=>{
+            // 返回结果
+            logger.info('登录失败');
+            logger.info(err);
+            res.send(createResultObj(false, err.message));
+        });
+});
+
+
 const createResultObj = (status = true, message = '', data = null) => ({
     status: status,
     message: message,

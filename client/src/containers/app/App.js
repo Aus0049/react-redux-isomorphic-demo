@@ -9,7 +9,7 @@ import moment from 'moment';
 // 全局这是moment中文
 moment.locale('zh-cn');
 
-const supportsHistory = 'pushState' in window.history
+const supportsHistory = 'pushState' in window.history;
 
 // 这个项目的容器
 class App extends React.PureComponent {

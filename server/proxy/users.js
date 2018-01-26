@@ -77,6 +77,12 @@ async function signInUser (username, password, res) {
     return userInfo;
 }
 
+async function signOutUser (sessionId) {
+    // 根据sessionId 去找redis中的数据 然后删除
+    await Redis.del(sessionId);
+    logger.info('登出清除redis完成');
+}
+
 // 公共方法
 function setRedis(user, time) {
     const sessionId = Secret.stringEncryptSha1(user._id.toString());
@@ -93,5 +99,6 @@ function setRedis(user, time) {
 
 module.exports = {
     signUpUser,
-    signInUser
+    signInUser,
+    signOutUser
 };

@@ -47,7 +47,7 @@ const set = (key, value, time) => {
                 if (!data) return resolve();
 
                 const duration = (new Date() - startTime);
-                logger.info('Cache', 'set', key, (duration + 'ms').green, 'timeout', (time + 's'));
+                logger.info('Cache', 'set', key, (duration + 'ms'), 'timeout', (time + 's'));
 
                 resolve(data);
             });
@@ -55,5 +55,22 @@ const set = (key, value, time) => {
     });
 };
 
+// 删除
+const del = (key) => {
+    return new Promise(function (resolve, reject) {
+        const startTime = new Date();
+
+        client.del(key, (err)=>{
+            if (err) return reject(err);
+
+            const duration = (new Date() - startTime);
+            logger.info('Cache', 'del', key, (duration + 'ms'));
+
+            resolve();
+        });
+    });
+};
+
 exports.get = get;
 exports.set = set;
+exports.del = del;
