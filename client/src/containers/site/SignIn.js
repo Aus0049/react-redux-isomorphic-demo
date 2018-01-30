@@ -70,7 +70,7 @@ class SignIn extends React.Component {
         return (
             <div className="sign-up-container">
                 <List
-                    renderHeader={() => '注册用户登录'}
+                    renderHeader={() => '用户登录'}
                 >
                     <InputItem
                         value={username}
