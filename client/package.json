@@ -87,6 +87,7 @@
     "postcss-px2rem": "^0.3.0",
     "postcss-pxtorem": "^4.0.1",
     "pre-commit": "^1.2.2",
+    "precss": "^3.1.0",
     "promise": "7.1.1",
     "react-dev-utils": "^3.1.1",
     "react-error-overlay": "^1.0.9",
@@ -98,7 +99,7 @@
     "url-loader": "0.5.9",
     "webpack": "2.6.1",
     "webpack-bundle-analyzer": "^2.9.1",
-    "webpack-dev-server": "2.5.0",
+    "webpack-dev-server": "^2.5.0",
     "webpack-hot-middleware": "^2.21.0",
     "webpack-manifest-plugin": "1.1.0",
     "yargs": "^10.1.1"

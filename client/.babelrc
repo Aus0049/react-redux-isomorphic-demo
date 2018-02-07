@@ -5,6 +5,6 @@
     "react"
   ],
   "plugins": [
-    ["import", {"libraryName": "antd-mobile", "style": true}]
+    "react-hot-loader/babel","transform-runtime"
   ]
 }
