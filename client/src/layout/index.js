@@ -1,14 +1,13 @@
 /**
- * Created by Aus on 2018/1/16.
+ * Created by Aus on 2018/2/28.
  */
-import React from 'react'
-// import all style here
-import 'normalize.css';
-import 'antd-mobile/dist/antd-mobile.less';
-import 'font-awesome/css/font-awesome.css';
-import '../style/public.scss'
+import React, { Component } from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {actions} from '../actions';
+// import '../style/index.scss';
 
-class Layout extends React.Component {
+class Layout extends Component {
     render () {
         return (
             <div className="layout-container">
@@ -18,4 +17,4 @@ class Layout extends React.Component {
     }
 }
 
-export default Layout
+export default connect(null, dispatch=> {return { ...bindActionCreators(actions,dispatch), dispatch}})(Layout)

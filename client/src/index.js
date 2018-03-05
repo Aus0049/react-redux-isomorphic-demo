@@ -1,76 +1,41 @@
+/**
+ * Created by Aus on 2018/3/1.
+ */
 import React from 'react';
-// import { hydrate } from 'react-dom';
-import ReactDOM from 'react-dom';
-import createStore from './store/createStore';
-import App from './containers/app/App';
+import { hydrate, render } from 'react-dom';
+import thunk from 'redux-thunk'
+import reduxLogger from 'redux-logger'
+import {createStore, compose, applyMiddleware, combineReducers} from "redux"
+import { BrowserRouter as Router, } from "react-router-dom"
+import {Provider} from "react-redux"
+import reducer from "./reducers/"
+import Routes from "./route"
+import '../public/style/index.scss';
 
-// ========================================================
-// Store Instantiation
-// ========================================================
-const initialState = window.___INITIAL_STATE__
-const store = createStore(initialState)
+// createStore
+const middleware = [thunk, reduxLogger];
 
-window.__state__ = store.getState();
+const store = createStore(
+    reducer,
+    window.__INITIAL_STATE__,
+    compose(
+        applyMiddleware(...middleware),
+    )
+);
 
-// ========================================================
-// Render Setup
-// ========================================================
-const MOUNT_NODE = document.getElementById('root')
+store.subscribe(() => {
+    console.log('store subscribe');
+    console.log(store.getState());
+});
 
-let render = () => {
-    // ssr use this
-    // hydrate (
-    //     <App store={store} />,
-    //     MOUNT_NODE
-    // );
+// 处理客户端渲染和服务端渲染切换
+const currentRender = module.hot ? render : hydrate ;
 
-    ReactDOM.render(
-        <App store={store} />,
-        MOUNT_NODE
-    );
-};
-
-// ========================================================
-// Developer Tools Setup
-// ========================================================
-if (window.__DEV__) {
-    if (window.devToolsExtension) {
-        window.devToolsExtension.open()
-    }
-}
-
-// This code is excluded from production bundle
-if (window.__DEV__) {
-    if (module.hot) {
-        // Development render functions
-        const renderApp = render
-        const renderError = (error) => {
-            const RedBox = require('redbox-react')['default']
-
-            ReactDOM.render(<RedBox error={error} />, MOUNT_NODE)
-        }
-
-        // Wrap render in try/catch
-        render = () => {
-            try {
-                renderApp()
-            } catch (error) {
-                console.error(error)
-                renderError(error)
-            }
-        }
-
-        // Setup hot module replacement
-        module.hot.accept('./routes/index', () =>
-            setImmediate(() => {
-                ReactDOM.unmountComponentAtNode(MOUNT_NODE)
-                render()
-            })
-        )
-    }
-}
-
-// ========================================================
-// Go!
-// ========================================================
-render()
+currentRender(
+    <Provider store={store}>
+        <Router>
+            <Routes />
+        </Router>
+    </Provider>,
+    document.getElementById('root')
+);

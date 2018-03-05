@@ -1,116 +1,97 @@
 /**
- * Created by Aus on 2018/2/2.
+ * Created by Aus on 2018/2/28.
+ *
+ * 两套webpack配置 dev配置是本地开发时候的配置 也就是常规的webpack配置
+ * 这里的webpack版本是2.6 ！！！
  */
-//加载Node的Path模块
-const path = require('path');
-const config = require('../config/client');
-//加载webpack模块
+const config = require('../config/');
 const webpack = require('webpack');
-//加载自动化HTML自动化编译插件
+// 自动将js混入html模板中的插件
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const autoprefixer = require('autoprefixer');
-const precss = require('precss');
 
+// 配置项
 const webpackConfig = {
     devtool: 'source-map',
     entry: {
         app: [
-            'react-hot-loader/patch',
-            `webpack-dev-server/client?http://0.0.0.0:${config.client_port}`,
-            'webpack/hot/only-dev-server',
             config.entry_path // 入口文件
         ],
-        vendor: [
+        vendor: [ // 公共文件包
             'react',
             'react-dom',
             'redux',
             'react-redux',
             'react-router',
             'axios'
-        ],
-        output: {
-            path: config.dist_path,
-            filename: `${config.dist_js_path}[name].js`,
-            publicPath: '/'
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.css$/,
-                    include: [config.style_path],
-                    use: [
-                        {loader: 'style-loader'},
-                        {
-                            loader: 'css-loader',
-                            options: {
-                                modules: true,
-                                camelCase: true,
-                                localIdentName: '[name]_[local]_[hash:base64:3]',
-                                importLoaders: 1,
-                                sourceMap: true
-                            }
-                        },
-                        {
-                            loader: 'postcss-loader',
-                            options: {
-                                sourceMap: true,
-                                plugins: () => [
-                                    precss(),
-                                    autoprefixer({
-                                        browsers: ['last 3 version', 'ie >= 10']
-                                    })
-                                ]
-                            }
-                        },
-                        {
-                            test: /\.js$/,
-                            exclude: /node_modules/,
-                            use: [
-                                {
-                                    loader: 'babel-loader',
-                                }
-                            ]
-                        },
-                        {
-                            test: /\.(png|jpeg|jpg|gif|svg)$/,
-                            use: [
-                                {
-                                    loader: 'file-loader',
-                                    options: {
-                                        name: `${config.dist_asset_path}/[name].[ext]`
-                                    }
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        plugins: [
-            new HtmlWebpackPlugin({
-                template: config.entry_template_path,
-                inject: true,
-                hash: true,
-                minify: {
-                    removeComments: true,
-                    collapseWhitespace: false
-                },
-                chunks: [
-                    'index', 'vendor'
-                ],
-                filename: 'index.html'
-            }),
-            new webpack.optimize.CommonsChunkPlugin({
-                names: [
-                    'vendor'
-                ],
-                filename: `${config.dist_js_path}/[name]_[hash:base64:3].js`
-            }),
-            new webpack.HotModuleReplacementPlugin(),
-            new webpack.NamedModulesPlugin(),
-            new webpack.NoEmitOnErrorsPlugin()
         ]
-    }
+    },
+    output: {
+        path: config.dist_path,
+        filename: 'assets/js/[name]_[hash].js',
+        publicPath: '/', // 按需加载和额外资源路径
+        // 添加 chunkFilename
+        chunkFilename: '[name]_[chunkhash:5].chunk.js'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                enforce: "pre",
+                exclude: /node_modules/,
+                use: [
+                    {loader: 'eslint-loader'}
+                ]
+            },
+            {
+                test: /\.js$/,
+                exclude: /node_modules/,
+                use: [
+                    {loader: 'babel-loader'},
+                ]
+            },
+            {
+                test: /\.scss$/,
+                use: [
+                    {loader: 'style-loader'},
+                    {loader: 'css-loader'},
+                    {loader: 'postcss-loader'},
+                    {loader: 'sass-loader'}
+                ]
+            },
+            {
+                test: /\.(png|jpg|gif|svg)$/,
+                loader: 'url-loader'
+            },
+            {
+                test: [/\.woff(\?.*)?$/, /\.woff2(\?.*)?$/, /\.otf(\?.*)?$/, /\.ttf(\?.*)?$/, /\.eot(\?.*)?$/, /\.swf(\?.*)?$/],
+                loader: 'url-loader'
+            },
+
+        ]
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: config.entry_template_path,
+            inject: 'body',
+            // favicon: paths.client('static/favicon.ico'),
+            hash: true,
+            minify: {
+                removeComments: true,
+                collapseWhitespace: false
+            },
+            chunks: [
+                'app', 'vendor'
+            ],
+            filename: 'index.html'
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            names: ['vendor'],
+            filename: 'assets/js/[name]_[hash].js'
+        }),
+        new webpack.DefinePlugin(config.globals),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoEmitOnErrorsPlugin()
+    ]
 };
 
 module.exports = webpackConfig;
