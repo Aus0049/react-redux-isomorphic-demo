@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development PORT=9000 node ./bin/www",
+    "start": "NODE_ENV=development PORT=9000 nodemon ./bin/www --watch",
     "lint": "eslint bin middlewares models proxy public/js routes"
   },
   "dependencies": {
@@ -27,6 +27,7 @@
     "serve-favicon": "~2.4.5"
   },
   "devDependencies": {
-    "eslint": "^4.16.0"
+    "eslint": "^4.16.0",
+    "nodemon": "^1.17.1"
   }
 }

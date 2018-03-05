@@ -20,10 +20,10 @@ class Home extends Component {
 
         return list.map((item)=>{
 
-            const { headImgUrl, name, content, images, createTime, isLiked, comments } = item;
+            const { id, headImgUrl, name, content, images, createTime, isLiked, comments } = item;
 
             return (
-                <div className="list-container">
+                <div key={id} className="list-container">
                     <div className="list-content">
                         <div className="list-title">
                             <Link className="name" to={'/user'}>{name}</Link>
