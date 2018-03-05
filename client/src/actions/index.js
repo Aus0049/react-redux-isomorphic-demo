@@ -1,18 +1,19 @@
 /**
  * Created by Aus on 2018/2/28.
  */
-
-const HOME_FETCH_LIST = 'HOME_FETCH_LIST';
+// action types
+const HOME_UPDATE_LIST = 'HOME_UPDATE_LIST';
 
 export const actionsTypes = {
-    HOME_FETCH_LIST
+    HOME_UPDATE_LIST
 };
 
-const homeFetchList = () => ({
-    type: HOME_FETCH_LIST,
-    payLoad: null,
+// actions
+const updateHomeList = (list) => ({
+    type: HOME_UPDATE_LIST,
+    payload: list
 });
 
 export const actions = {
-    homeFetchList
+    updateHomeList
 };

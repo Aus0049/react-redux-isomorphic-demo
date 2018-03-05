@@ -9,8 +9,10 @@ const homeInitState = {
 
 export default function (state = {...homeInitState}, action) {
     switch (action.type) {
-        case actionsTypes.HOME_FETCH_LIST: {
-            console.log('reducer');
+        case actionsTypes.HOME_UPDATE_LIST: {
+            // 更新list
+            state.list = action.payload;
+
             return {...state};
         }
         default: {

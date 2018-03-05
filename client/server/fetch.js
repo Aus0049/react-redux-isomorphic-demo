@@ -4,16 +4,21 @@
 import 'isomorphic-fetch';
 
 import { createStore } from "redux";
+import {actions} from '../src/actions/';
 
 import reducer from "../src/reducers";
 
-let host = process.argv[2];
-
 const fetchHomeList = (store) => {
-    return fetch(`${host}/site/test-url`)
+    return fetch('http://localhost:9000/api/aaa')
+        .then((response)=>{
+            console.log('then response------');
+            return response.json();
+        })
         .then((res)=>{
-            console.log('then res------');
-            console.log(res);
+            console.log(res.data.length);
+            store.dispatch(actions.updateHomeList(res.data));
+
+            return res;
         })
         .catch((res)=>{
             console.log('catch res------');
@@ -25,7 +30,7 @@ export default function (req) {
     const store = createStore(reducer);
 
     const promises = [
-        fetchHomeList
+        fetchHomeList(store)
     ];
 
     return {

@@ -14,25 +14,23 @@ const port = process.env.PORT || '3000';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname,'../dist')));
+app.use(express.static(path.join(__dirname, '../dist')));
 
-app.use('*', (req, res, next) => {
-
+app.use('/home', (req, res, next) => {
+    console.log('app');
     const { promises, store } = fetch(req);
 
-    const html = render(req, res, store);
-    res.send(html);
-
-    // Promise.all(promises).then(x => {
-    //     const html = render(req, res, store);
-    //     res.send(html);
-    // }).catch(x=>{
-    //     console.log(x);
-    //     res.end('server error,please visit later')
-    // })
+    Promise.all(promises).then(data => {
+        const html = render(req, res, store);
+        res.send(html);
+    }).catch(err =>{
+        console.log('err');
+        console.log(err);
+        res.end('server error,please visit later')
+    })
 
 });
 
 app.listen(port);
 
-console.log('server run on port'+port);
+console.log('server run on port: '+port);
