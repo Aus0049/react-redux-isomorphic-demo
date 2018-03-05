@@ -27,7 +27,13 @@ const server = new WebpackDevServer(compiler, {
         chunkModules: false,
         colors: true
     },
-    historyApiFallback: true
+    historyApiFallback: true,
+    proxy: {
+        '/api/*': {
+            target: `http://${config.server_address}:${config.server_port}`,
+            secure: false,
+        }
+    }
 });
 
 server.listen(config.client_port, 'localhost', () => {

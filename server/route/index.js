@@ -6,7 +6,7 @@ const router = express.Router();
 const logger = require('../config/logger_config').getLogger('route');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
+router.get('/aaa', function(req, res, next) {
     // test api
     logger.info('route 获取数据');
 

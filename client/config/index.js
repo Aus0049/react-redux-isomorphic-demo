@@ -23,6 +23,9 @@ const config = {
     client_server: 'localhost',
     client_port: 3000,
 
+    server_address: 'localhost',
+    server_port: 9000,
+
     // 一些变量
     env : process.env.NODE_ENV || 'development',
 };
