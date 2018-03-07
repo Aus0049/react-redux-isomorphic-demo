@@ -16,7 +16,8 @@ const webpackConfig = {
         app: [
             config.entry_path // 入口文件
         ],
-        vendor: [ // 公共文件包
+        vendor: [
+            // 公共文件包
             'react',
             'react-dom',
             'redux',

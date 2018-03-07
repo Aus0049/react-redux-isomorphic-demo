@@ -21,12 +21,25 @@ const webpackIsomorphicToolsPluginIns =
 const webpackConfig = {
     devtool: 'source-map', // source-map还是需要保留 处理一些bug时候需要源码
     entry: {
-        app: [config.entry_path] // 同构只需要一个主文件
+        app: [
+            config.entry_path // 入口文件
+        ],
+        vendor: [
+            // 公共文件包
+            'react',
+            'react-dom',
+            'redux',
+            'react-redux',
+            'react-router',
+            'axios'
+        ]
     },
     output: {
         path: config.dist_path,
         filename: 'assets/js/[name]_[hash].js',
-        publicPath: '/' // 按需加载和额外资源路径
+        publicPath: '/', // 按需加载和额外资源路径
+        // 添加 chunkFilename
+        chunkFilename: 'assets/js/[name]_[chunkhash:5].chunk.js'
     },
     module: {
         rules: [
@@ -68,6 +81,11 @@ const webpackConfig = {
         webpackIsomorphicToolsPluginIns,
         new ExtractTextPlugin({
             filename: 'assets/css/[name]_[hash].css',
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            minChunks: 'Infinity',
+            names: ['vendor'],
+            filename: 'assets/js/[name]_[hash].js'
         }),
         new webpack.DefinePlugin(config.globals),
         new webpack.optimize.OccurrenceOrderPlugin(),

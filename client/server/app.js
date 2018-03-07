@@ -15,9 +15,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../dist')));
-// app.use(express.static(path.join(__dirname, '../dist')));
 
-app.use('/home', (req, res, next) => {
+app.use('*', (req, res, next) => {
 
     const { promises, store } = fetch(req);
 
@@ -31,6 +30,8 @@ app.use('/home', (req, res, next) => {
     })
 
 });
+
+
 
 app.listen(port);
 

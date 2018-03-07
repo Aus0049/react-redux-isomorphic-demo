@@ -7,8 +7,13 @@ require('babel-polyfill');
 require('source-map-support').install();
 
 require('babel-register')({
-    presets: ['es2015', 'react-app']
-})
+    presets: ['es2015', 'react-app'],
+    plugins: [
+        'syntax-dynamic-import',
+        'dynamic-import-node',
+        'react-loadable/babel'
+    ]
+});
 
 var WebpackIsomorphicTools = require('webpack-isomorphic-tools');
 
