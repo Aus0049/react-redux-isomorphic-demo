@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {actions} from '../actions';
 import { Link } from 'react-router-dom';
+// import axios from 'axios';
 
 class Home extends Component {
     constructor(props) {
@@ -15,6 +16,16 @@ class Home extends Component {
             list: []
         };
     }
+    // componentDidMount() {
+    //     setTimeout(()=>{
+    //         axios.get('/api/aaa')
+    //             .then((res)=> res.data)
+    //             .then((res)=>{
+    //                 console.log(res);
+    //                 this.props.dispatch(actions.updateHomeList(res.data));
+    //             });
+    //     }, 500);
+    // }
     getListDOM () {
         const {list} = this.props;
 
